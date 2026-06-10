@@ -1,0 +1,119 @@
+<!-- 宠物信息页 -->
+<view class="page">
+  <!-- 顶部提示 -->
+  <view class="guide">
+    <text class="guide-text">完善以下信息，让指引更准确</text>
+    <view class="guide-tag" wx:if="{{symptom_name}}">
+      <text class="guide-tag-text">{{emoji}} {{symptom_name}}</text>
+    </view>
+  </view>
+
+  <!-- 表单区域 -->
+  <view class="form">
+
+    <!-- 品种选择 -->
+    <view class="form-section">
+      <text class="form-label">宠物品种</text>
+      <view class="picker-group">
+        <picker class="picker" mode="selector" range="{{speciesList}}" value="{{speciesIndex}}" bindchange="onSpeciesChange">
+          <view class="picker-display {{speciesIndex === -1 ? 'picker-placeholder' : ''}}">
+            <text>{{speciesIndex > -1 ? speciesList[speciesIndex] : '选择猫/狗'}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+        <picker class="picker" mode="selector" range="{{breedCategoryList}}" value="{{breedCategoryIndex}}" bindchange="onBreedCategoryChange" disabled="{{speciesIndex === -1}}">
+          <view class="picker-display {{breedCategoryIndex === -1 ? 'picker-placeholder' : ''}}">
+            <text>{{breedCategoryIndex > -1 ? breedCategoryList[breedCategoryIndex] : '选择分类'}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+        <picker class="picker" mode="selector" range="{{breedList}}" value="{{breedIndex}}" bindchange="onBreedChange" disabled="{{breedCategoryIndex === -1}}">
+          <view class="picker-display {{breedIndex === -1 ? 'picker-placeholder' : ''}}">
+            <text>{{breedIndex > -1 ? breedList[breedIndex] : '选择具体品种'}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+      </view>
+      <!-- 常见品种快捷选择 -->
+      <view class="quick-breeds" wx:if="{{speciesIndex > -1}}">
+        <text class="quick-breeds-label">常见品种：</text>
+        <scroll-view class="quick-breeds-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+          <view 
+            class="quick-breed-tag {{quickBreedIndex === idx ? 'quick-breed-tag-active' : ''}}"
+            wx:for="{{quickBreeds}}"
+            wx:key="index"
+            data-index="{{idx}}"
+            bindtap="onQuickBreed"
+          >
+            <text>{{item}}</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <!-- 年龄 -->
+    <view class="form-section">
+      <text class="form-label">年龄</text>
+      <view class="picker-group">
+        <picker class="picker" mode="selector" range="{{ageStageList}}" value="{{ageStageIndex}}" bindchange="onAgeStageChange">
+          <view class="picker-display {{ageStageIndex === -1 ? 'picker-placeholder' : ''}}">
+            <text>{{ageStageIndex > -1 ? ageStageList[ageStageIndex] : '选择年龄段'}}</text>
+            <text class="picker-arrow">›</text>
+          </view>
+        </picker>
+        <input 
+          class="form-input age-input" 
+          type="digit" 
+          placeholder="具体月龄/岁数（选填）" 
+          placeholder-class="input-placeholder"
+          value="{{ageDetail}}"
+          bindinput="onAgeDetailInput"
+          maxlength="4"
+        />
+      </view>
+    </view>
+
+    <!-- 体重 -->
+    <view class="form-section">
+      <text class="form-label">体重</text>
+      <view class="weight-group">
+        <input 
+          class="form-input weight-input" 
+          type="digit" 
+          placeholder="请输入体重" 
+          placeholder-class="input-placeholder"
+          value="{{weight}}"
+          bindinput="onWeightInput"
+          maxlength="6"
+        />
+        <view class="weight-unit-group">
+          <view 
+            class="weight-unit {{weightUnit === 'kg' ? 'weight-unit-active' : ''}}"
+            data-unit="kg"
+            bindtap="onWeightUnitChange"
+          >
+            <text>kg</text>
+          </view>
+          <view 
+            class="weight-unit {{weightUnit === 'jin' ? 'weight-unit-active' : ''}}"
+            data-unit="jin"
+            bindtap="onWeightUnitChange"
+          >
+            <text>斤</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-bar">
+    <view class="skip-btn" bindtap="onSkip" wx:if="{{!editMode}}">
+      <text class="skip-btn-text">跳过，直接看指引</text>
+    </view>
+    <view class="confirm-btn" bindtap="onConfirm">
+      <text class="confirm-btn-text">{{editMode ? '保存宠物档案' : '确认并生成指引'}}</text>
+    </view>
+  </view>
+</view>

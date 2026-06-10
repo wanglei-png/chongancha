@@ -1,0 +1,51 @@
+<!-- 症状选择页 -->
+<view class="page">
+  <!-- 顶部引导 -->
+  <view class="guide">
+    <text class="guide-text">请选择宠物出现的症状</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <text class="loading-text">正在加载症状列表...</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view class="error-state" wx:elif="{{loadError}}">
+    <text class="error-text">加载失败，请检查网络后重试</text>
+    <view class="retry-btn" bindtap="onRetry">
+      <text class="retry-btn-text">重新加载</text>
+    </view>
+  </view>
+
+  <!-- 症状卡片列表 -->
+  <view class="symptom-list" wx:else>
+    <view 
+      class="symptom-card {{selectedIndex === index ? 'symptom-card-active' : ''}}"
+      wx:for="{{filteredSymptoms}}"
+      wx:key="index"
+      data-index="{{index}}"
+      bindtap="onSelectSymptom"
+    >
+      <text class="symptom-emoji">{{item.emoji || '🩺'}}</text>
+      <text class="symptom-name">{{item.symptom_name || item.name}}</text>
+      <!-- 审核中标签 -->
+      <view class="symptom-audit-badge" wx:if="{{item.audit_status === 'reviewing'}}">
+        <text class="symptom-audit-badge-text">审核中</text>
+      </view>
+      <view class="symptom-check {{selectedIndex === index ? 'symptom-check-active' : ''}}">
+        <text class="check-mark" wx:if="{{selectedIndex === index}}">✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-bar">
+    <view 
+      class="analyze-btn {{selectedIndex !== null ? 'analyze-btn-active' : 'analyze-btn-disabled'}}"
+      bindtap="onStartAnalyze"
+    >
+      <text class="analyze-btn-text">开始分析</text>
+    </view>
+  </view>
+</view>

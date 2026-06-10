@@ -1,0 +1,61 @@
+<view class="page">
+  <view class="content">
+    <view class="section">
+      <text class="section-title">免责声明</text>
+      <text class="section-body">
+        以上内容仅为AI辅助整理的健康信息，不能替代专业兽医诊断。
+
+宠安查（以下简称"本应用"）所提供的所有内容，包括但不限于文本、图片、分析结果、建议等，均基于人工智能技术生成，仅供用户参考，不构成任何医疗建议、诊断或治疗方案。
+
+本应用的核心功能是为宠物主人提供健康决策辅助信息，帮助用户在带宠物就医前更好地观察和记录症状。任何健康决策，包括是否就医、采取何种治疗措施，均应由具有执业资质的兽医在全面检查后做出。
+
+使用本应用即表示您理解并同意：
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">1. 信息仅供参考</text>
+      <text class="section-body">
+        本应用生成的所有信息均不构成兽医专业意见。AI模型可能存在局限性，无法覆盖所有可能的健康状况、品种差异或个体特殊情况。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">2. 紧急情况处理</text>
+      <text class="section-body">
+        如您的宠物出现以下紧急情况，请立即就医，不要等待本应用的指引：
+- 严重外伤或出血
+- 呼吸困难或窒息
+- 中毒或误食异物
+- 抽搐或意识丧失
+- 持续呕吐或腹泻超过24小时
+- 无法站立或行走
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">3. 责任限制</text>
+      <text class="section-body">
+        在法律允许的最大范围内，本应用及其开发者不对因使用或无法使用本应用所产生的任何直接、间接、附带、特殊或后果性损害承担责任。用户应自行承担使用本应用的全部风险。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">4. 第三方链接</text>
+      <text class="section-body">
+        本应用可能包含指向第三方网站或服务的链接。本应用不对这些第三方内容的准确性、完整性或可靠性负责。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">5. 条款更新</text>
+      <text class="section-body">
+        本应用保留随时修改本免责声明的权利。修改后的声明将在本页面发布，继续使用本应用即表示您接受修改后的条款。
+      </text>
+    </view>
+
+    <view class="footer-note">
+      <text class="footer-note-text">最近更新：2026年6月</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,165 @@
+<!-- 决策指引结果页 -->
+<view class="page">
+
+  <!-- ===== 顶部状态栏 ===== -->
+  <view class="status-bar">
+    <view class="status-dot"></view>
+    <text class="status-text">AI健康分析报告</text>
+  </view>
+
+  <!-- ===== 症状 + 宠物信息摘要 ===== -->
+  <view class="summary-bar">
+    <view class="summary-tag">
+      <text class="summary-tag-text">{{emoji}} {{symptom_name}}</text>
+    </view>
+    <text class="summary-pet-info">{{petSummary}}</text>
+  </view>
+
+  <!-- ===== 加载中 ===== -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <text class="loading-text">正在生成分析报告...</text>
+  </view>
+
+  <!-- ===== 加载失败 ===== -->
+  <view class="error-state" wx:elif="{{loadError}}">
+    <text class="error-text">加载失败，请检查网络后重试</text>
+    <view class="retry-btn" bindtap="onRetry">
+      <text class="retry-btn-text">重新加载</text>
+    </view>
+  </view>
+
+  <!-- ===== 内容区域 ===== -->
+  <view class="content" wx:else>
+
+    <!-- 区域1：居家观察建议 -->
+    <view class="section" id="section-home">
+      <view class="section-header">
+        <text class="section-icon">🏠</text>
+        <text class="section-title">居家观察建议</text>
+      </view>
+      <view class="section-body">
+        <!-- 前2条免费可见 -->
+        <view class="advice-card" wx:for="{{homeObservation}}" wx:for-index="idx" wx:key="idx" wx:if="{{idx < 2}}">
+          <view class="advice-num">{{idx + 1}}</view>
+          <view class="advice-content">
+            <text class="advice-text">{{item.action || item}}</text>
+            <view class="source-bar" wx:if="{{item.source}}">
+              <text class="source-tag source-{{item.confidence || 'medium'}}">📚 {{item.source}}</text>
+              <text class="audit-tag audit-tag-{{auditStatus}}">{{auditStatusText}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 第3条及以后 - 付费解锁 -->
+        <view class="advice-card advice-locked" wx:if="{{!isUnlocked && homeObservationTotal > homeObservation.length}}">
+          <view class="advice-lock-overlay">
+            <text class="lock-icon">🔒</text>
+            <text class="lock-text">解锁查看完整护理清单</text>
+          </view>
+          <view class="advice-locked-content">
+            <view class="advice-num">{{homeObservation.length + 1}}</view>
+            <text class="advice-text">{{homeObservation[2].action || homeObservation[2]}}</text>
+          </view>
+        </view>
+        <!-- 解锁后显示完整列表 -->
+        <view class="advice-card" wx:for="{{homeObservation}}" wx:for-index="idx" wx:key="idx" wx:if="{{idx >= 2 && isUnlocked}}">
+          <view class="advice-num">{{idx + 1}}</view>
+          <view class="advice-content">
+            <text class="advice-text">{{item.action || item}}</text>
+            <view class="source-bar" wx:if="{{item.source}}">
+              <text class="source-tag source-{{item.confidence || 'medium'}}">📚 {{item.source}}</text>
+              <text class="audit-tag audit-tag-{{auditStatus}}">{{auditStatusText}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 区域2：绝对禁止行为 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-icon">🚫</text>
+        <text class="section-title">绝对禁止行为</text>
+      </view>
+      <view class="section-body">
+        <view class="danger-card" wx:for="{{prohibitions}}" wx:key="index">
+          <view class="danger-icon">✕</view>
+          <view class="danger-content">
+            <text class="danger-title">{{item.action || item.title || '禁止操作'}}</text>
+            <view class="source-bar" wx:if="{{item.source}}">
+              <text class="severity-tag severity-{{item.severity || 'warning'}}">🚨 {{item.severity === 'fatal' ? '致命' : item.severity === 'serious' ? '严重' : '警告'}}</text>
+              <text class="source-tag">📚 {{item.source}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 区域3：建议就医的触发条件 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-icon">🚨</text>
+        <text class="section-title">建议就医的触发条件</text>
+      </view>
+      <view class="section-body">
+        <view class="warning-card" wx:for="{{redFlags}}" wx:key="index">
+          <view class="warning-icon">⚠</view>
+          <view class="warning-content">
+            <text class="warning-text">{{item.condition || item}}</text>
+            <view class="source-bar" wx:if="{{item.source}}">
+              <text class="priority-tag priority-{{item.priority || 'urgent'}}">⚡ {{item.priority === 'emergency' ? '紧急' : '需关注'}}</text>
+              <text class="source-tag">📚 {{item.source}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 生成病情摘要按钮（始终显示，未付费置灰，已付费蓝色） -->
+    <view class="summary-section">
+      <view class="summary-btn {{isUnlocked ? 'summary-btn-active' : 'summary-btn-disabled'}}" bindtap="onTapSummaryBtn">
+        <text class="summary-btn-icon">{{isUnlocked ? '写' : '锁'}}</text>
+        <text class="summary-btn-text">{{isUnlocked ? '生成病情摘要' : '解锁后生成病情摘要'}}</text>
+      </view>
+    </view>
+
+    <!-- 底部：返回症状选择 -->
+    <view class="back-section">
+      <text class="back-text">您的宠物还有其他症状？</text>
+      <text class="back-link" bindtap="onBackToSymptom">（如腹泻、精神萎靡）→ 返回症状选择</text>
+    </view>
+
+  </view>
+
+  <!-- ===== 审核信息栏 ===== -->
+  <view class="audit-info-bar">
+    <view class="audit-row">
+      <text class="audit-icon">{{auditIcon}}</text>
+      <text class="audit-text">{{auditText}}</text>
+      <text class="audit-date">{{auditDate}}</text>
+    </view>
+    <navigator url="/pages/sources/sources" class="audit-link">查看完整知识库来源 →</navigator>
+    <text class="audit-disclaimer">⚠️ 以上内容仅为AI辅助整理的健康信息，不能替代专业兽医诊断。如宠物症状持续或加重，请立即前往正规动物医院就诊。</text>
+  </view>
+
+  <!-- ===== 付费弹窗（半屏） ===== -->
+  <view class="pay-overlay {{showPayModal ? 'pay-overlay-show' : ''}}" bindtap="onClosePayModal">
+    <view class="pay-modal {{showPayModal ? 'pay-modal-show' : ''}}" catchtap="stopPropagation">
+      <view class="pay-modal-handle"></view>
+      <view class="pay-modal-content">
+        <text class="pay-modal-title">花1.9元，避免一次不必要的医院消费</text>
+        <text class="pay-modal-desc">解锁完整居家护理清单 + 兽医沟通摘要</text>
+        <text class="pay-modal-price">￥1.9</text>
+        <view class="pay-modal-btns">
+          <view class="pay-btn pay-btn-primary" bindtap="onPay">
+            <text class="pay-btn-primary-text">立即解锁（￥1.9）</text>
+          </view>
+          <view class="pay-btn pay-btn-secondary" bindtap="onClosePayModal">
+            <text class="pay-btn-secondary-text">稍后再说</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

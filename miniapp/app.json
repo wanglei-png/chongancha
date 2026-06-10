@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/symptom/symptom",
+    "pages/petinfo/petinfo",
+    "pages/result/result",
+    "pages/summary/summary",
+    "pages/profile/profile",
+    "pages/disclaimer/disclaimer",
+    "pages/privacy/privacy",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "enablePerformanceMonitor": true
+}

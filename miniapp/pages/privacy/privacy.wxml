@@ -1,0 +1,104 @@
+<view class="page">
+  <view class="content">
+    <view class="section">
+      <text class="section-title">隐私政策</text>
+      <text class="section-body">
+        宠安查（以下简称"本应用"）尊重并保护用户的隐私。本隐私政策说明了我们如何收集、使用、存储和保护您的个人信息。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">1. 数据收集范围</text>
+      <text class="section-body">
+        我们可能收集以下类型的信息：
+
+【您主动提供的信息】
+- 宠物信息：品种、年龄、体重、症状描述等（用于生成健康指引）
+- 用户信息：微信昵称、头像（用于个人中心展示）
+
+【自动收集的信息】
+- 设备信息：设备型号、操作系统版本（用于兼容性优化）
+- 使用数据：页面访问记录、功能使用频率（用于产品改进）
+
+我们不会收集您的真实姓名、电话号码、家庭住址等个人身份信息。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">2. 数据使用目的</text>
+      <text class="section-body">
+        我们收集的信息仅用于以下目的：
+
+- 提供和优化健康决策辅助服务
+- 生成个性化的宠物健康指引
+- 改善用户体验和产品功能
+- 统计和分析应用使用情况
+
+我们不会将您的数据用于广告投放、数据交易或任何未经授权的商业用途。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">3. 数据存储与安全</text>
+      <text class="section-body">
+        您的数据存储在微信小程序本地缓存及安全的云服务器中。我们采取合理的技术措施保护您的数据安全，包括但不限于数据加密、访问控制等。
+
+我们仅在提供服务所必需的期限内保留您的数据。当您注销账户或要求删除数据时，我们将在合理时间内完成数据清除。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">4. 用户权利</text>
+      <text class="section-body">
+        您享有以下权利：
+
+【知情权】您有权了解我们收集了哪些数据以及如何使用。
+
+【访问权】您可以通过个人中心查看已保存的宠物档案信息。
+
+【更正权】如您的宠物信息有误，您可以随时在个人中心编辑更正。
+
+【删除权】您可以通过联系客服要求删除您的全部数据。
+
+【撤回同意权】您可以随时停止使用本应用，撤回对我们收集数据的同意。
+
+【数据可携带权】您可以要求获取您的数据副本。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">5. 数据共享</text>
+      <text class="section-body">
+        我们不会将您的个人信息出售或出租给第三方。在以下情况下，我们可能会共享必要的信息：
+
+- 获得您的明确同意
+- 法律法规要求
+- 保护用户或公众的生命财产安全
+
+我们可能使用第三方云服务提供商存储数据，这些服务商均遵守严格的数据保护标准。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">6. 政策更新</text>
+      <text class="section-body">
+        我们可能会不时更新本隐私政策。重大变更时，我们将在应用内通知您。继续使用本应用即表示您同意更新后的政策。
+      </text>
+    </view>
+
+    <view class="section">
+      <text class="section-title">7. 联系我们</text>
+      <text class="section-body">
+        如您对本隐私政策有任何疑问，或需要行使您的数据权利，请通过以下方式联系我们：
+
+邮箱：privacy@chongancha.com
+
+我们将在15个工作日内回复您的请求。
+      </text>
+    </view>
+
+    <view class="footer-note">
+      <text class="footer-note-text">最近更新：2026年6月</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,244 @@
+/* 宠物信息页样式 */
+
+page {
+  background-color: #f8f9fa;
+  font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+/* ===== 顶部提示 ===== */
+.guide {
+  padding: 40rpx 0 32rpx 0;
+}
+
+.guide-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.guide-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16rpx;
+  padding: 8rpx 20rpx;
+  background-color: #f0f6ff;
+  border-radius: 24rpx;
+}
+
+.guide-tag-text {
+  font-size: 24rpx;
+  color: #2B7AE8;
+  font-weight: 500;
+}
+
+/* ===== 表单区域 ===== */
+.form {
+  flex: 1;
+  padding-bottom: 200rpx;
+}
+
+.form-section {
+  margin-bottom: 36rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+}
+
+/* ===== 选择器 ===== */
+.picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.picker {
+  width: 100%;
+}
+
+.picker-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 88rpx;
+  padding: 0 28rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e8e8ed;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+.picker-placeholder {
+  color: #aeaeb2;
+}
+
+.picker-arrow {
+  font-size: 36rpx;
+  color: #c7c7cc;
+  font-weight: 300;
+}
+
+/* ===== 常见品种 ===== */
+.quick-breeds {
+  margin-top: 16rpx;
+}
+
+.quick-breeds-label {
+  font-size: 24rpx;
+  color: #8e8e93;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.quick-breeds-scroll {
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8rpx;
+}
+
+.quick-breed-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 10rpx 24rpx;
+  margin-right: 16rpx;
+  background-color: #ffffff;
+  border: 2rpx solid #e8e8ed;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.quick-breed-tag-active {
+  background-color: #f0f6ff;
+  border-color: #2B7AE8;
+  color: #2B7AE8;
+  font-weight: 500;
+}
+
+/* ===== 输入框 ===== */
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 28rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e8e8ed;
+  font-size: 28rpx;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+.input-placeholder {
+  color: #aeaeb2;
+  font-size: 28rpx;
+}
+
+.age-input {
+  width: 100%;
+}
+
+/* ===== 体重 ===== */
+.weight-group {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.weight-input {
+  flex: 1;
+}
+
+.weight-unit-group {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e8e8ed;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.weight-unit {
+  padding: 0 28rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #8e8e93;
+  transition: all 0.2s ease;
+}
+
+.weight-unit-active {
+  background-color: #2B7AE8;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ===== 底部按钮 ===== */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 32rpx 48rpx;
+  background-color: #f8f9fa;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  border-radius: 48rpx;
+  background: linear-gradient(145deg, #2B7AE8 0%, #1a6ad6 100%);
+  box-shadow: 0 8rpx 24rpx rgba(43, 122, 232, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+}
+
+.skip-btn {
+  width: 100%;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skip-btn-text {
+  font-size: 28rpx;
+  color: #2B7AE8;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4rpx;
+}

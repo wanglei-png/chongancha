@@ -1,0 +1,588 @@
+/* 决策指引结果页样式 */
+
+page {
+  background-color: #f8f9fa;
+  padding-bottom: 120rpx;
+  font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+/* ===== 加载/错误状态 ===== */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+  margin-bottom: 24rpx;
+}
+
+.retry-btn {
+  padding: 16rpx 48rpx;
+  border: 2rpx solid #2B7AE8;
+  border-radius: 40rpx;
+}
+
+.retry-btn-text {
+  font-size: 28rpx;
+  color: #2B7AE8;
+  font-weight: 500;
+}
+
+/* ===== 顶部状态栏 ===== */
+.status-bar {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 32rpx 16rpx;
+  background-color: #ffffff;
+}
+
+.status-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: #34C759;
+  margin-right: 10rpx;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.status-text {
+  font-size: 24rpx;
+  color: #34C759;
+  font-weight: 500;
+}
+
+/* ===== 症状 + 宠物信息摘要 ===== */
+.summary-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding: 20rpx 32rpx;
+  background-color: #f0f4f8;
+  border-bottom: 2rpx solid #e8ecf0;
+}
+
+.summary-tag {
+  padding: 8rpx 20rpx;
+  background-color: #ffffff;
+  border-radius: 24rpx;
+  border: 2rpx solid #e0e4e8;
+}
+
+.summary-tag-text {
+  font-size: 24rpx;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.summary-pet-info {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: 400;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 0 32rpx;
+}
+
+/* ===== 区域通用 ===== */
+.section {
+  margin-top: 32rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-icon {
+  font-size: 36rpx;
+  margin-right: 12rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+/* ===== 居家观察建议卡片 ===== */
+.advice-card {
+  display: flex;
+  padding: 28rpx 24rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  border: 2rpx solid #e8e8ed;
+  position: relative;
+  overflow: hidden;
+}
+
+.advice-num {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background-color: #e8f0fe;
+  color: #2B7AE8;
+  font-size: 24rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.advice-content {
+  flex: 1;
+}
+
+.advice-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* 锁定状态 */
+.advice-locked {
+  opacity: 0.3;
+  position: relative;
+  pointer-events: none;
+}
+
+.advice-locked-content {
+  display: flex;
+  filter: blur(4rpx);
+}
+
+.advice-lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.lock-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.lock-text {
+  font-size: 26rpx;
+  color: #2B7AE8;
+  font-weight: 600;
+}
+
+/* ===== 禁止行为卡片（红色） ===== */
+.danger-card {
+  display: flex;
+  padding: 28rpx 24rpx;
+  background-color: #fff5f5;
+  border-radius: 16rpx;
+  border: 2rpx solid #ffd1d1;
+}
+
+.danger-icon {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background-color: #FF3B30;
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.danger-content {
+  flex: 1;
+}
+
+.danger-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #cc2a22;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+/* ===== 就医条件卡片（橙色/黄色） ===== */
+.warning-card {
+  display: flex;
+  padding: 28rpx 24rpx;
+  background-color: #fffbf0;
+  border-radius: 16rpx;
+  border: 2rpx solid #ffe8b3;
+}
+
+.warning-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.warning-content {
+  flex: 1;
+}
+
+.warning-text {
+  font-size: 26rpx;
+  color: #8a6d2b;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ===== 生成病情摘要 ===== */
+.summary-section {
+  margin-top: 40rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.summary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 96rpx;
+  border-radius: 48rpx;
+}
+
+.summary-btn-active {
+  background: linear-gradient(145deg, #2B7AE8 0%, #1a6ad6 100%);
+  box-shadow: 0 8rpx 24rpx rgba(43, 122, 232, 0.3);
+}
+
+.summary-btn-disabled {
+  background-color: #CCCCCC;
+  box-shadow: none;
+}
+
+.summary-btn-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.summary-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+}
+
+/* ===== 返回症状选择 ===== */
+.back-section {
+  margin-top: 48rpx;
+  padding: 32rpx 0;
+  text-align: center;
+  border-top: 2rpx solid #e8e8ed;
+}
+
+.back-text {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.back-link {
+  font-size: 26rpx;
+  color: #2B7AE8;
+  font-weight: 500;
+}
+
+/* ===== 来源标签与审核信息 ===== */
+.source-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16rpx;
+  margin-top: 16rpx;
+  border-top: 1rpx solid #F0F0F0;
+}
+
+.source-tag {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.source-tag.source-high {
+  color: #4CAF50;
+}
+
+.source-tag.source-medium {
+  color: #FF9800;
+}
+
+.source-tag.source-low {
+  color: #9E9E9E;
+}
+
+.audit-tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.audit-tag-approved {
+  color: #4CAF50;
+  background: #E8F5E9;
+}
+
+.audit-tag-reviewing {
+  color: #FF9800;
+  background: #FFF3E0;
+}
+
+.audit-tag-pending {
+  color: #9E9E9E;
+  background: #F5F5F5;
+}
+
+.severity-tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.severity-tag.severity-fatal {
+  background: #FFEBEE;
+  color: #D32F2F;
+}
+
+.severity-tag.severity-serious {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.severity-tag.severity-warning {
+  background: #FFFDE7;
+  color: #FBC02D;
+}
+
+.priority-tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.priority-tag.priority-emergency {
+  background: #FFEBEE;
+  color: #D32F2F;
+}
+
+.priority-tag.priority-urgent {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.audit-info-bar {
+  background: #F8F8F8;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin: 40rpx 32rpx;
+}
+
+.audit-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.audit-icon {
+  font-size: 28rpx;
+  margin-right: 8rpx;
+}
+
+.audit-text {
+  font-size: 26rpx;
+  color: #333333;
+  font-weight: 500;
+  flex: 1;
+}
+
+.audit-date {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.audit-link {
+  font-size: 24rpx;
+  color: #2B7AE8;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.audit-disclaimer {
+  font-size: 22rpx;
+  color: #999999;
+  line-height: 1.6;
+  display: block;
+}
+
+/* ===== 底部声明（固定在页面最底部） ===== */
+.disclaimer {
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background-color: #f0f2f5;
+}
+
+.disclaimer-text {
+  font-size: 22rpx;
+  color: #8e8e93;
+  line-height: 1.7;
+}
+
+/* ===== 付费弹窗 ===== */
+.pay-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.pay-overlay-show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pay-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  border-radius: 32rpx 32rpx 0 0;
+  z-index: 101;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: 48rpx;
+}
+
+.pay-modal-show {
+  transform: translateY(0);
+}
+
+.pay-modal-handle {
+  width: 48rpx;
+  height: 6rpx;
+  background-color: #d1d1d6;
+  border-radius: 3rpx;
+  margin: 16rpx auto 24rpx;
+}
+
+.pay-modal-content {
+  padding: 0 40rpx;
+  text-align: center;
+}
+
+.pay-modal-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.pay-modal-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.pay-modal-price {
+  font-size: 56rpx;
+  font-weight: 800;
+  color: #FF3B30;
+  display: block;
+  margin: 20rpx 0 36rpx;
+}
+
+.pay-modal-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.pay-btn {
+  width: 100%;
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pay-btn-primary {
+  background: linear-gradient(145deg, #2B7AE8 0%, #1a6ad6 100%);
+  box-shadow: 0 8rpx 24rpx rgba(43, 122, 232, 0.3);
+}
+
+.pay-btn-primary-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+}
+
+.pay-btn-secondary {
+  background-color: #f5f5f7;
+}
+
+.pay-btn-secondary-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+  font-weight: 500;
+}

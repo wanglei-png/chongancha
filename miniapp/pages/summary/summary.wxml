@@ -1,0 +1,105 @@
+<!-- 病情摘要生成器 -->
+<view class="page">
+
+  <!-- ===== 顶部标题 ===== -->
+  <view class="header">
+    <view class="header-back" bindtap="onGoBack">
+      <text class="header-back-icon">‹</text>
+    </view>
+    <text class="header-title">📋 病情摘要</text>
+    <view class="header-placeholder"></view>
+  </view>
+
+  <!-- ===== 加载中 ===== -->
+  <view class="loading-state" wx:if="{{isLoading}}">
+    <text class="loading-text">正在生成病情摘要...</text>
+  </view>
+
+  <!-- ===== 加载失败 ===== -->
+  <view class="error-state" wx:elif="{{loadError}}">
+    <text class="error-text">生成失败，请检查网络后重试</text>
+    <view class="retry-btn" bindtap="onRetry">
+      <text class="retry-btn-text">重新生成</text>
+    </view>
+  </view>
+
+  <!-- ===== 内容区域 ===== -->
+  <view class="content" wx:else>
+    <view class="summary-card">
+      <view class="summary-card-header">
+        <text class="summary-card-title">🐾 宠物病情摘要</text>
+        <text class="summary-card-date">{{summaryDate}}</text>
+      </view>
+      <textarea
+        class="summary-textarea"
+        value="{{summaryText}}"
+        bindinput="onTextInput"
+        auto-height
+        maxlength="2000"
+        placeholder="可在此补充更多细节，如饮食变化、精神状态等"
+      />
+    </view>
+
+    <!-- ===== 操作按钮区 ===== -->
+    <view class="actions">
+      <view class="action-btn action-btn-primary" bindtap="onCopyText">
+        <text class="action-btn-icon">📋</text>
+        <text class="action-btn-text">复制全文</text>
+      </view>
+      <view class="action-btn action-btn-disabled">
+        <text class="action-btn-icon">💾</text>
+        <text class="action-btn-text">保存为图片（即将上线）</text>
+      </view>
+    </view>
+
+    <!-- ===== 底部引导 ===== -->
+    <view class="footer-guide">
+      <view class="guide-subscribe-btn" bindtap="onTapSubscribe">
+        <text class="guide-subscribe-text">月付￥19无限次使用</text>
+      </view>
+      <text class="guide-share">🔗 分享摘要给好友，双方各得1次免费查询</text>
+    </view>
+
+    <!-- ===== 订阅选择弹窗 ===== -->
+    <view class="sub-overlay {{showSubModal ? 'sub-overlay-show' : ''}}" bindtap="onCloseSubModal">
+      <view class="sub-modal {{showSubModal ? 'sub-modal-show' : ''}}" catchtap="stopPropagation">
+        <view class="sub-modal-handle"></view>
+        <view class="sub-modal-content">
+          <text class="sub-modal-title">选择订阅方案</text>
+          <view class="sub-option {{selectedSub === 'monthly' ? 'sub-option-active' : ''}}" bindtap="onSelectMonthly">
+            <view class="sub-option-info">
+              <text class="sub-option-name">月付方案</text>
+              <text class="sub-option-desc">灵活订阅，随时取消</text>
+            </view>
+            <view class="sub-option-price">
+              <text class="sub-option-price-num">￥19</text>
+              <text class="sub-option-price-unit">/月</text>
+            </view>
+            <view class="sub-option-check {{selectedSub === 'monthly' ? 'sub-option-check-active' : ''}}">
+              <text class="sub-check-mark" wx:if="{{selectedSub === 'monthly'}}">✓</text>
+            </view>
+          </view>
+          <view class="sub-option {{selectedSub === 'yearly' ? 'sub-option-active' : ''}}" bindtap="onSelectYearly">
+            <view class="sub-option-info">
+              <text class="sub-option-name">年付方案</text>
+              <text class="sub-option-desc">省￥69，日均仅￥0.44</text>
+            </view>
+            <view class="sub-option-price">
+              <text class="sub-option-price-num">￥159</text>
+              <text class="sub-option-price-unit">/年</text>
+            </view>
+            <view class="sub-option-tag">最划算</view>
+            <view class="sub-option-check {{selectedSub === 'yearly' ? 'sub-option-check-active' : ''}}">
+              <text class="sub-check-mark" wx:if="{{selectedSub === 'yearly'}}">✓</text>
+            </view>
+          </view>
+          <view class="sub-confirm-btn" bindtap="onConfirmSub">
+            <text class="sub-confirm-btn-text">确认订阅</text>
+          </view>
+          <text class="sub-cancel-text" bindtap="onCloseSubModal">稍后再说</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

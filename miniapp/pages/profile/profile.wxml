@@ -1,0 +1,114 @@
+<!-- 个人中心 -->
+<view class="page">
+
+  <!-- ===== 顶部：用户信息 ===== -->
+  <view class="user-section" bindtap="onTapUser">
+    <view class="user-avatar">
+      <!-- 已登录显示微信头像，加载失败时降级显示占位符 -->
+      <image class="user-avatar-img" wx:if="{{userInfo.avatarUrl && !avatarLoadFailed}}" src="{{userInfo.avatarUrl}}" mode="aspectFill" binderror="onAvatarError" />
+      <view class="user-avatar-placeholder" wx:else>
+        <text class="user-avatar-placeholder-text">我</text>
+      </view>
+    </view>
+    <view class="user-info">
+      <text class="user-name">{{userInfo.nickName || '点击登录'}}</text>
+      <text class="user-desc" wx:if="{{!userInfo.nickName}}">登录后可同步宠物档案</text>
+    </view>
+    <text class="user-arrow">›</text>
+  </view>
+
+  <!-- ===== 中部：我的宠物档案 ===== -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">🐾 我的宠物档案</text>
+    </view>
+    <view class="section-body">
+      <!-- 有宠物信息 -->
+      <view class="pet-card" wx:for="{{petList}}" wx:key="index" bindtap="onEditPet" data-index="{{index}}">
+        <view class="pet-avatar">
+          <text class="pet-avatar-text">🐾</text>
+        </view>
+        <view class="pet-detail">
+          <text class="pet-name">{{item.name || item.breed || '我的宠物'}}</text>
+          <text class="pet-meta">{{item.breed || ''}}{{item.ageStage ? '·' + item.ageStage : ''}}{{item.weight ? '·' + item.weight : ''}}</text>
+        </view>
+        <text class="pet-arrow">›</text>
+      </view>
+      <!-- 添加宠物 -->
+      <view class="pet-add-card" bindtap="onAddPet">
+        <text class="pet-add-icon">+</text>
+        <text class="pet-add-text">添加宠物档案</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 底部：订阅状态 ===== -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">📋 订阅状态</text>
+    </view>
+    <view class="sub-status-card">
+      <view class="sub-status-left">
+        <text class="sub-status-label">当前套餐</text>
+        <text class="sub-status-value {{subInfo.isActive ? 'sub-status-active' : 'sub-status-inactive'}}">{{subInfo.isActive ? subInfo.planName : '未订阅'}}</text>
+      </view>
+      <view class="sub-status-right" wx:if="{{subInfo.isActive}}">
+        <text class="sub-status-expire">到期：{{subInfo.expireDate}}</text>
+      </view>
+      <view class="sub-status-right" wx:else>
+        <view class="sub-status-btn" bindtap="onTapSubscribe">
+          <text class="sub-status-btn-text">去订阅</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 底部链接 ===== -->
+  <view class="footer-links">
+    <text class="footer-link" bindtap="onTapDisclaimer">免责声明</text>
+    <text class="footer-link-sep">|</text>
+    <text class="footer-link" bindtap="onTapPrivacy">隐私政策</text>
+  </view>
+
+  <!-- ===== 订阅选择弹窗 ===== -->
+  <view class="sub-overlay {{showSubModal ? 'sub-overlay-show' : ''}}" bindtap="onCloseSubModal">
+    <view class="sub-modal {{showSubModal ? 'sub-modal-show' : ''}}" catchtap="stopPropagation">
+      <view class="sub-modal-handle"></view>
+      <view class="sub-modal-content">
+        <text class="sub-modal-title">选择订阅方案</text>
+        <view class="sub-option {{selectedSub === 'monthly' ? 'sub-option-active' : ''}}" bindtap="onSelectMonthly">
+          <view class="sub-option-info">
+            <text class="sub-option-name">月付方案</text>
+            <text class="sub-option-desc">灵活订阅，随时取消</text>
+          </view>
+          <view class="sub-option-price">
+            <text class="sub-option-price-num">￥19</text>
+            <text class="sub-option-price-unit">/月</text>
+          </view>
+          <view class="sub-option-check {{selectedSub === 'monthly' ? 'sub-option-check-active' : ''}}">
+            <text class="sub-check-mark" wx:if="{{selectedSub === 'monthly'}}">✓</text>
+          </view>
+        </view>
+        <view class="sub-option {{selectedSub === 'yearly' ? 'sub-option-active' : ''}}" bindtap="onSelectYearly">
+          <view class="sub-option-info">
+            <text class="sub-option-name">年付方案</text>
+            <text class="sub-option-desc">省￥69，日均仅￥0.44</text>
+          </view>
+          <view class="sub-option-price">
+            <text class="sub-option-price-num">￥159</text>
+            <text class="sub-option-price-unit">/年</text>
+          </view>
+          <view class="sub-option-tag">最划算</view>
+          <view class="sub-option-check {{selectedSub === 'yearly' ? 'sub-option-check-active' : ''}}">
+            <text class="sub-check-mark" wx:if="{{selectedSub === 'yearly'}}">✓</text>
+          </view>
+        </view>
+        <view class="sub-confirm-btn" bindtap="onConfirmSub">
+          <text class="sub-confirm-btn-text">确认订阅</text>
+        </view>
+        <text class="sub-cancel-text" bindtap="onCloseSubModal">稍后再说</text>
+      </view>
+    </view>
+  </view>
+
+</view>

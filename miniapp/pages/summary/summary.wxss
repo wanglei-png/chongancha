@@ -1,0 +1,382 @@
+/* 病情摘要生成器样式 */
+
+page {
+  background-color: #f8f9fa;
+  font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+  box-sizing: border-box;
+  background-color: #f8f9fa;
+}
+
+/* ===== 加载/错误状态 ===== */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+}
+
+.error-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+  margin-bottom: 24rpx;
+}
+
+.retry-btn {
+  padding: 16rpx 48rpx;
+  border: 2rpx solid #2B7AE8;
+  border-radius: 40rpx;
+}
+
+.retry-btn-text {
+  font-size: 28rpx;
+  color: #2B7AE8;
+  font-weight: 500;
+}
+
+/* ===== 顶部标题 ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 32rpx;
+  background-color: #ffffff;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.header-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-back-icon {
+  font-size: 48rpx;
+  color: #333;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.header-placeholder {
+  width: 60rpx;
+}
+
+/* ===== 内容区域 ===== */
+.content {
+  padding: 32rpx;
+}
+
+/* ===== 摘要卡片 ===== */
+.summary-card {
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.summary-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.summary-card-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.summary-card-date {
+  font-size: 24rpx;
+  color: #8e8e93;
+}
+
+/* ===== 摘要文本编辑区 ===== */
+.summary-textarea {
+  width: 100%;
+  min-height: 300rpx;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 1.6;
+  border: 2rpx solid #eeeeee;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-sizing: border-box;
+  background-color: #fafafa;
+}
+
+.summary-textarea:focus {
+  border-color: #2B7AE8;
+  background-color: #ffffff;
+}
+
+/* ===== 操作按钮区 ===== */
+.actions {
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 96rpx;
+  border-radius: 16rpx;
+}
+
+.action-btn-primary {
+  background-color: #2B7AE8;
+}
+
+.action-btn-primary:active {
+  background-color: #1a6ad6;
+}
+
+.action-btn-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.action-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+}
+
+.action-btn-disabled {
+  background-color: #e8e8ed;
+}
+
+.action-btn-disabled .action-btn-text {
+  color: #8e8e93;
+  font-weight: 500;
+}
+
+/* ===== 底部引导 ===== */
+.footer-guide {
+  margin-top: 48rpx;
+  text-align: center;
+  padding: 32rpx 0;
+  border-top: 2rpx solid #e8e8ed;
+}
+
+.guide-subscribe-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  padding: 0 40rpx;
+  border: 2rpx solid #2B7AE8;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.guide-subscribe-btn:active {
+  background-color: #f0f6ff;
+}
+
+.guide-subscribe-text {
+  font-size: 28rpx;
+  color: #2B7AE8;
+  font-weight: 600;
+}
+
+.guide-share {
+  font-size: 24rpx;
+  color: #999999;
+  display: block;
+}
+
+/* ===== 订阅选择弹窗 ===== */
+.sub-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sub-overlay-show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sub-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  border-radius: 32rpx 32rpx 0 0;
+  z-index: 101;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  padding-bottom: 48rpx;
+}
+
+.sub-modal-show {
+  transform: translateY(0);
+}
+
+.sub-modal-handle {
+  width: 48rpx;
+  height: 6rpx;
+  background-color: #d1d1d6;
+  border-radius: 3rpx;
+  margin: 16rpx auto 24rpx;
+}
+
+.sub-modal-content {
+  padding: 0 40rpx;
+}
+
+.sub-modal-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  display: block;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.sub-option {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border: 2rpx solid #e8e8ed;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  position: relative;
+}
+
+.sub-option-active {
+  border-color: #2B7AE8;
+  background-color: #f8fbff;
+}
+
+.sub-option-info {
+  flex: 1;
+}
+
+.sub-option-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 6rpx;
+}
+
+.sub-option-desc {
+  font-size: 24rpx;
+  color: #8e8e93;
+  display: block;
+}
+
+.sub-option-price {
+  text-align: right;
+  margin-right: 20rpx;
+}
+
+.sub-option-price-num {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #FF3B30;
+}
+
+.sub-option-price-unit {
+  font-size: 24rpx;
+  color: #8e8e93;
+}
+
+.sub-option-tag {
+  position: absolute;
+  top: -12rpx;
+  right: 24rpx;
+  padding: 4rpx 16rpx;
+  background-color: #FF3B30;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sub-option-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid #d1d1d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sub-option-check-active {
+  border-color: #2B7AE8;
+  background-color: #2B7AE8;
+}
+
+.sub-check-mark {
+  font-size: 24rpx;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.sub-confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(145deg, #2B7AE8 0%, #1a6ad6 100%);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16rpx;
+  box-shadow: 0 8rpx 24rpx rgba(43, 122, 232, 0.3);
+}
+
+.sub-confirm-btn-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2rpx;
+}
+
+.sub-cancel-text {
+  font-size: 28rpx;
+  color: #8e8e93;
+  display: block;
+  text-align: center;
+  margin-top: 24rpx;
+  padding: 16rpx 0;
+}
