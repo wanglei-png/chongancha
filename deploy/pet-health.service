@@ -1,0 +1,43 @@
+[Unit]
+Description=宠安查后端服务 - Pet Health Assistant API
+Documentation=https://github.com/wanglei-png/chongancha
+After=network.target mysqld.service nginx.service
+Wants=mysqld.service nginx.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+# 工作目录
+WorkingDirectory=/opt/pet-health-assistant/backend
+
+# Python 虚拟环境路径
+Environment=PATH=/usr/local/python3.9/bin:/opt/pet-health-assistant/backend/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+Environment=PYTHONUNBUFFERED=1
+
+# 启动命令：使用虚拟环境的 uvicorn
+ExecStart=/opt/pet-health-assistant/backend/venv/bin/uvicorn main:app \
+    --host 127.0.0.1 \
+    --port 8001 \
+    --workers 4 \
+    --log-level info \
+    --access-log \
+    --no-server-header
+
+# 重启策略
+Restart=always
+RestartSec=5
+
+# 资源限制
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# 安全配置
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

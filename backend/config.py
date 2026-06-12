@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     APP_DEBUG: bool = True
 
     # MySQL 数据库配置
-    DB_HOST: str = "127.0.0.1"
+    DB_HOST: str = "116.62.175.15"
     DB_PORT: int = 3306
     DB_USER: str = "root"
-    DB_PASSWORD: str = "wanglei940414"
+    DB_PASSWORD: str = "Wanglei940414!"
     DB_DATABASE: str = "pet_health"
 
     @property
