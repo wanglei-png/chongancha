@@ -1,4 +1,5 @@
 // pages/profile/profile.js
+const api = require('../../utils/api')
 const { reportPageView } = require('../../utils/analytics')
 
 Page({
@@ -13,8 +14,9 @@ Page({
       nickName: ''
     },
 
-    // 宠物列表
-    petList: [],
+    // 宠物列表（从后端 API 加载）
+    pets: [],
+    isLoading: false,
 
     // 订阅信息
     subInfo: {
@@ -37,7 +39,7 @@ Page({
   onLoad(options) {
     reportPageView('profile')
     this.loadUserInfo()
-    this.loadPetList()
+    this.loadPets()
     this.loadSubInfo()
   },
 
@@ -46,7 +48,7 @@ Page({
    */
   onShow() {
     // 每次显示时刷新数据
-    this.loadPetList()
+    this.loadPets()
   },
 
   /**
@@ -60,11 +62,18 @@ Page({
   },
 
   /**
-   * 加载宠物列表
+   * 从后端 API 加载宠物列表
    */
-  loadPetList() {
-    const petList = wx.getStorageSync('petList') || []
-    this.setData({ petList })
+  loadPets() {
+    this.setData({ isLoading: true })
+    api.get('/pets').then(res => {
+      const pets = Array.isArray(res) ? res : []
+      this.setData({ pets, isLoading: false })
+    }).catch(err => {
+      console.error('加载宠物列表失败：', err)
+      // 即使 API 返回空数据错误，也清空列表
+      this.setData({ pets: [], isLoading: false })
+    })
   },
 
   /**
@@ -121,29 +130,51 @@ Page({
   },
 
   /**
-   * 编辑宠物
-   */
-  onEditPet(e) {
-    const index = e.currentTarget.dataset.index
-    const pet = this.data.petList[index]
-    if (pet) {
-      wx.navigateTo({
-        url: `/pages/petinfo/petinfo?edit=${index}&petInfo=${encodeURIComponent(JSON.stringify(pet))}`,
-        fail: (err) => {
-          console.error('跳转编辑宠物页失败：', err)
-        }
-      })
-    }
-  },
-
-  /**
-   * 添加宠物
+   * 添加宠物 - 跳转到 petinfo 页（来源 profile）
    */
   onAddPet() {
     wx.navigateTo({
-      url: '/pages/petinfo/petinfo',
+      url: '/pages/petinfo/petinfo?from=profile',
       fail: (err) => {
         console.error('跳转添加宠物页失败：', err)
+      }
+    })
+  },
+
+  /**
+   * 编辑宠物 - 跳转到 petinfo 页（携带 pet_id）
+   */
+  onEditPet(e) {
+    const petId = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/petinfo/petinfo?from=profile&pet_id=${petId}`,
+      fail: (err) => {
+        console.error('跳转编辑宠物页失败：', err)
+      }
+    })
+  },
+
+  /**
+   * 删除宠物
+   */
+  onDeletePet(e) {
+    const petId = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '确认删除',
+      content: '确定删除该宠物档案吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '删除中...' })
+          api.del(`/pets/${petId}`).then(() => {
+            wx.hideLoading()
+            wx.showToast({ title: '删除成功', icon: 'success' })
+            this.loadPets()
+          }).catch(err => {
+            wx.hideLoading()
+            console.error('删除宠物失败：', err)
+            wx.showToast({ title: '删除失败，请重试', icon: 'none' })
+          })
+        }
       }
     })
   },

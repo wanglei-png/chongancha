@@ -26,6 +26,56 @@ page {
   line-height: 1.4;
 }
 
+/* ===== 骨架屏加载状态 ===== */
+.skeleton-state {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  flex: 1;
+  padding-bottom: 160rpx;
+}
+
+.skeleton-card {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 28rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  border: 2rpx solid #e8e8ed;
+  min-height: 120rpx;
+}
+
+.skeleton-emoji {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background-color: #e8e8ed;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.skeleton-name {
+  flex: 1;
+  height: 32rpx;
+  border-radius: 8rpx;
+  background-color: #e8e8ed;
+}
+
+.skeleton-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #e8e8ed 25%, #f0f0f5 50%, #e8e8ed 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* ===== 加载/错误状态 ===== */
 .loading-state,
 .error-state {
@@ -42,10 +92,17 @@ page {
   color: #8e8e93;
 }
 
+.error-icon {
+  font-size: 56rpx;
+  margin-bottom: 16rpx;
+}
+
 .error-text {
   font-size: 28rpx;
   color: #8e8e93;
   margin-bottom: 24rpx;
+  text-align: center;
+  padding: 0 32rpx;
 }
 
 .retry-btn {

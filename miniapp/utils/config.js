@@ -4,7 +4,10 @@
  */
 const CONFIG = {
   // 后端 API 地址
-  API_BASE_URL: 'http://127.0.0.1:8001',
+  // 开发环境
+  // API_BASE_URL: 'http://127.0.0.1:8001',
+  // 生产环境（备案前用 IP）
+  API_BASE_URL: 'http://116.62.175.15',
 
   // API 版本前缀
   API_PREFIX: '/api/v1',

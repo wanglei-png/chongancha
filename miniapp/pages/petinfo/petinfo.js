@@ -1,4 +1,5 @@
 // pages/petinfo/petinfo.js
+const api = require('../../utils/api')
 const { reportPageView } = require('../../utils/analytics')
 
 
@@ -33,9 +34,19 @@ Page({
     symptom_name: '',
     emoji: '',
 
-    // 编辑模式
+    // 编辑模式（旧：从个人中心通过本地缓存编辑）
     editMode: false,
     editIndex: -1,
+
+    // 来源页面：'symptom'（症状选择进入）或 'profile'（个人中心进入）
+    fromPage: 'symptom',
+    // 编辑模式时使用（从个人中心通过 API 编辑）
+    petId: null,
+    // 按钮文字
+    buttonText: '确认并生成指引',
+
+    // 宠物名称
+    petName: '',
 
     // 品种 - 三级联动
     speciesList: ['猫', '狗'],
@@ -74,12 +85,30 @@ Page({
       this.setData({ emoji: decodeURIComponent(options.emoji) })
     }
 
-    // 编辑模式：从个人中心传入
+    // 来源页面
+    const from = options.from || 'symptom'
+    const petId = options.pet_id || null
+
+    // 按钮文字
+    let buttonText = '确认并生成指引'
+    if (from === 'profile') {
+      buttonText = petId ? '保存修改' : '保存宠物档案'
+    }
+
+    this.setData({
+      fromPage: from,
+      petId: petId,
+      buttonText: buttonText,
+    })
+
+    // 编辑模式：从个人中心传入（旧方式，通过本地缓存）
     if (options.edit !== undefined) {
       const editIndex = parseInt(options.edit)
       this.setData({
         editMode: true,
-        editIndex: editIndex
+        editIndex: editIndex,
+        fromPage: 'profile',
+        buttonText: '保存修改',
       })
 
       // 预填宠物信息
@@ -92,10 +121,80 @@ Page({
         }
       }
     }
+
+    // 编辑模式：通过 API 加载宠物数据
+    if (petId) {
+      this.loadPetDetail(petId)
+    }
   },
 
   /**
-   * 预填宠物信息到表单（编辑模式）
+   * 通过 API 加载宠物详情
+   */
+  loadPetDetail(petId) {
+    api.get(`/pets/${petId}`).then(res => {
+      const data = {}
+
+      // 宠物名称
+      if (res.name) data.petName = res.name
+
+      // 品种
+      if (res.species) {
+        const speciesMap = { 'cat': '猫', 'dog': '狗' }
+        const species = speciesMap[res.species] || res.species
+        const speciesIndex = this.data.speciesList.indexOf(species)
+        if (speciesIndex > -1) {
+          data.speciesIndex = speciesIndex
+          const categories = Object.keys(BREED_DATA[species] || {})
+          data.breedCategoryList = categories
+          data.quickBreeds = QUICK_BREEDS[species] || []
+
+          if (res.breed) {
+            for (let i = 0; i < categories.length; i++) {
+              const breeds = BREED_DATA[species][categories[i]]
+              const bi = breeds.indexOf(res.breed)
+              if (bi > -1) {
+                data.breedCategoryIndex = i
+                data.breedList = breeds
+                data.breedIndex = bi
+                break
+              }
+            }
+          }
+        }
+      }
+
+      // 年龄
+      if (res.age_type) {
+        const ageMap = { 'baby': '幼年', 'adult': '成年', 'senior': '老年' }
+        const ageStage = ageMap[res.age_type] || res.age_type
+        const ageStageIndex = this.data.ageStageList.indexOf(ageStage)
+        if (ageStageIndex > -1) data.ageStageIndex = ageStageIndex
+      }
+      if (res.age_months) {
+        data.ageDetail = String(res.age_months)
+      }
+
+      // 体重
+      if (res.weight) {
+        data.weight = String(res.weight)
+      }
+      if (res.weight_unit) {
+        data.weightUnit = res.weight_unit
+      }
+
+      this.setData(data)
+    }).catch(err => {
+      console.error('加载宠物详情失败：', err)
+      wx.showToast({
+        title: '加载宠物信息失败',
+        icon: 'none',
+      })
+    })
+  },
+
+  /**
+   * 预填宠物信息到表单（编辑模式 - 旧方式）
    */
   fillPetInfo(pet) {
     const data = {}
@@ -248,6 +347,13 @@ Page({
   },
 
   /**
+   * 输入宠物名称
+   */
+  onPetNameInput(e) {
+    this.setData({ petName: e.detail.value })
+  },
+
+  /**
    * 输入体重
    */
   onWeightInput(e) {
@@ -266,9 +372,10 @@ Page({
    * 组装宠物信息
    */
   buildPetInfo() {
-    const { speciesIndex, speciesList, breedIndex, breedList, ageStageIndex, ageStageList, ageDetail, weight, weightUnit } = this.data
+    const { petName, speciesIndex, speciesList, breedIndex, breedList, ageStageIndex, ageStageList, ageDetail, weight, weightUnit } = this.data
 
     const info = {}
+    if (petName) info.petName = petName
     if (speciesIndex > -1) info.species = speciesList[speciesIndex]
     if (breedIndex > -1) info.breed = breedList[breedIndex]
     if (ageStageIndex > -1) info.ageStage = ageStageList[ageStageIndex]
@@ -311,7 +418,65 @@ Page({
   },
 
   /**
-   * 确认并生成指引 / 保存宠物档案
+   * 提交按钮 - 根据来源页面执行不同操作
+   */
+  onSubmit() {
+    if (this.data.fromPage === 'profile') {
+      this.savePetProfile()
+    } else {
+      this.onConfirm()
+    }
+  },
+
+  /**
+   * 保存宠物档案到后端 API
+   */
+  savePetProfile() {
+    const { petName, speciesIndex, speciesList, breedIndex, breedList, ageStageIndex, ageStageList, ageDetail, weight, weightUnit, petId } = this.data
+
+    // 验证必填字段
+    if (speciesIndex === -1) {
+      wx.showToast({ title: '请选择宠物品种', icon: 'none' })
+      return
+    }
+    if (breedIndex === -1) {
+      wx.showToast({ title: '请选择具体品种', icon: 'none' })
+      return
+    }
+
+    // 映射中文品种为后端枚举值
+    const speciesMap = { '猫': 'cat', '狗': 'dog' }
+    const ageMap = { '幼年': 'baby', '成年': 'adult', '老年': 'senior' }
+
+    const petData = {
+      name: petName || '宠物',
+      species: speciesMap[speciesList[speciesIndex]] || speciesList[speciesIndex],
+      breed: breedList[breedIndex],
+      age_type: ageMap[ageStageList[ageStageIndex]] || 'adult',
+      age_months: ageDetail ? parseInt(ageDetail) : null,
+      weight: weight ? parseFloat(weight) : null,
+      weight_unit: weightUnit || 'kg',
+    }
+
+    const apiCall = petId
+      ? api.put(`/pets/${petId}`, petData)
+      : api.post('/pets', petData)
+
+    wx.showLoading({ title: '保存中...' })
+
+    apiCall.then(() => {
+      wx.hideLoading()
+      wx.showToast({ title: '保存成功', icon: 'success' })
+      setTimeout(() => wx.navigateBack(), 1500)
+    }).catch(err => {
+      wx.hideLoading()
+      console.error('保存宠物档案失败：', err)
+      wx.showToast({ title: '保存失败，请重试', icon: 'none' })
+    })
+  },
+
+  /**
+   * 确认并生成指引 / 保存宠物档案（旧方式）
    */
   onConfirm() {
     const petInfo = this.buildPetInfo()

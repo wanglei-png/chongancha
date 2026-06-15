@@ -1,4 +1,4 @@
-"""宠安查 - FastAPI 后端入口"""
+"""宠急查 - FastAPI 后端入口"""
 
 from contextlib import asynccontextmanager
 
@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from database import init_db
 from routers import auth, pet, symptom, payment, summary, analytics
+from admin.routes import router as admin_router
 
 
 @asynccontextmanager
@@ -15,16 +16,25 @@ async def lifespan(app: FastAPI):
     """应用生命周期管理"""
     # 启动时：初始化数据库表
     init_db()
+
+    # V2.1 初始化向量索引
+    try:
+        from init_vector_index import init_vector_index
+        init_vector_index()
+    except Exception as e:
+        print(f"[Startup] 向量索引初始化失败（非阻断）: {e}")
+
     yield
     # 关闭时：清理资源（如有需要）
 
 
 app = FastAPI(
-    title="宠安查 API",
-    description="宠物健康助手后端服务",
-    version="1.0.0",
+    title="宠急查 API",
+    description="宠物健康决策助手后端服务",
+    version="2.1.0",
     lifespan=lifespan,
 )
+
 
 # CORS 中间件配置
 app.add_middleware(
@@ -43,12 +53,15 @@ app.include_router(payment.router)
 app.include_router(summary.router)
 app.include_router(analytics.router)
 
+# V2.2 管理后台
+app.include_router(admin_router)
+
 
 @app.get("/")
 def root():
     """根路径，返回 API 基本信息"""
     return {
-        "name": "宠安查 API",
+        "name": "宠急查 API",
         "version": "1.0.0",
         "environment": settings.APP_ENV,
     }

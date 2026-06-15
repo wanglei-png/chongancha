@@ -5,16 +5,28 @@
     <text class="guide-text">请选择宠物出现的症状</text>
   </view>
 
-  <!-- 加载中 -->
-  <view class="loading-state" wx:if="{{isLoading}}">
-    <text class="loading-text">正在加载症状列表...</text>
+  <!-- 骨架屏加载状态 -->
+  <view class="skeleton-state" wx:if="{{isLoading}}">
+    <view class="skeleton-card" wx:for="{{8}}" wx:key="index">
+      <view class="skeleton-emoji skeleton-shimmer"></view>
+      <view class="skeleton-name skeleton-shimmer"></view>
+    </view>
   </view>
 
-  <!-- 加载失败 -->
+  <!-- 加载失败 - 根据错误类型显示不同提示 -->
   <view class="error-state" wx:elif="{{loadError}}">
-    <text class="error-text">加载失败，请检查网络后重试</text>
-    <view class="retry-btn" bindtap="onRetry">
+    <text class="error-icon" wx:if="{{errorType === 'network'}}">📶</text>
+    <text class="error-icon" wx:elif="{{errorType === 'timeout'}}">⏱️</text>
+    <text class="error-icon" wx:elif="{{errorType === 'server'}}">🔧</text>
+    <text class="error-icon" wx:elif="{{errorType === 'notfound'}}">🔍</text>
+    <text class="error-icon" wx:elif="{{errorType === 'empty'}}">📭</text>
+    <text class="error-icon" wx:else>⚠️</text>
+    <text class="error-text">{{errorMessage || '加载失败，请检查网络后重试'}}</text>
+    <view class="retry-btn" wx:if="{{showRetry}}" bindtap="onRetry">
       <text class="retry-btn-text">重新加载</text>
+    </view>
+    <view class="retry-btn" wx:else bindtap="onGoHome">
+      <text class="retry-btn-text">返回首页</text>
     </view>
   </view>
 

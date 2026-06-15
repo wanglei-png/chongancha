@@ -3,7 +3,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
@@ -60,9 +60,11 @@ async def get_current_user(
 
 
 async def get_current_user_optional(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    request: Request,
 ) -> Optional[dict]:
     """FastAPI 依赖注入：可选 JWT 认证，未登录时返回 None
+
+    从请求头中手动提取 Authorization，避免 HTTPBearer 自动返回 403。
 
     用法：
         @router.post("/generate")
@@ -71,8 +73,9 @@ async def get_current_user_optional(
         ):
             user_id = current_user.get("user_id") if current_user else None
     """
-    if credentials is None:
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
         return None
-    token = credentials.credentials
+    token = auth_header.split(" ", 1)[1]
     payload = verify_token(token)
     return payload  # 验证失败返回 None，不抛出异常

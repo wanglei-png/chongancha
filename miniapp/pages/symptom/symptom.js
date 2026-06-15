@@ -14,6 +14,9 @@ Page({
     isAnalyzing: false,
     isLoading: true,
     loadError: false,
+    errorType: '',         // 错误类型：network/timeout/server/notfound/empty
+    errorMessage: '',      // 错误提示文本
+    showRetry: true,       // 是否显示重试按钮
   },
 
   /**
@@ -28,7 +31,7 @@ Page({
    * 从后端获取症状列表
    */
   fetchSymptoms() {
-    this.setData({ isLoading: true, loadError: false })
+    this.setData({ isLoading: true, loadError: false, errorType: '', errorMessage: '' })
 
     api.get('/symptoms')
       .then((res) => {
@@ -46,14 +49,16 @@ Page({
       })
       .catch((err) => {
         console.error('获取症状列表失败:', err)
+        const errorMessage = err.message || api.getErrorMessage(err)
+        const errorType = err.type || 'unknown'
+        const showRetry = api.shouldShowRetry(err)
+
         this.setData({
           isLoading: false,
           loadError: true,
-        })
-        wx.showToast({
-          title: err.message || '网络异常，请稍后重试',
-          icon: 'none',
-          duration: 2000,
+          errorType,
+          errorMessage,
+          showRetry,
         })
       })
   },
@@ -63,6 +68,15 @@ Page({
    */
   onRetry() {
     this.fetchSymptoms()
+  },
+
+  /**
+   * 返回首页
+   */
+  onGoHome() {
+    wx.switchTab({
+      url: '/pages/index/index',
+    })
   },
 
   /**

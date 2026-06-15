@@ -18,7 +18,7 @@ from symptom_seeds import SYMPTOM_SEEDS
 
 def main():
     print("=" * 50)
-    print("宠安查 - 数据库初始化")
+    print("宠急查 - 数据库初始化")
     print("=" * 50)
 
     # 创建所有表

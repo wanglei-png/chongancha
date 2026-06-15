@@ -11,6 +11,20 @@
   <!-- 表单区域 -->
   <view class="form">
 
+    <!-- 宠物名称 -->
+    <view class="form-section">
+      <text class="form-label">宠物名称</text>
+      <input 
+        class="form-input" 
+        type="text" 
+        placeholder="请输入宠物名字，如：咪咪、豆豆" 
+        placeholder-class="input-placeholder"
+        value="{{petName}}"
+        bindinput="onPetNameInput"
+        maxlength="20"
+      />
+    </view>
+
     <!-- 品种选择 -->
     <view class="form-section">
       <text class="form-label">宠物品种</text>
@@ -112,8 +126,8 @@
     <view class="skip-btn" bindtap="onSkip" wx:if="{{!editMode}}">
       <text class="skip-btn-text">跳过，直接看指引</text>
     </view>
-    <view class="confirm-btn" bindtap="onConfirm">
-      <text class="confirm-btn-text">{{editMode ? '保存宠物档案' : '确认并生成指引'}}</text>
+    <view class="confirm-btn" bindtap="onSubmit">
+      <text class="confirm-btn-text">{{buttonText}}</text>
     </view>
   </view>
 </view>

@@ -28,3 +28,10 @@ miniapp/node_modules/
 
 # Logs
 *.log
+
+# === 宠急查 - 排除大文件/缓存 ===
+backend/models_cache/
+backend/milvus_pet_health.db
+backend/.milvus_pet_health.db.lock
+backend/=2.6.0
+backend.tar.gz

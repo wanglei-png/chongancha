@@ -15,16 +15,56 @@
     <text class="summary-pet-info">{{petSummary}}</text>
   </view>
 
-  <!-- ===== 加载中 ===== -->
-  <view class="loading-state" wx:if="{{isLoading}}">
-    <text class="loading-text">正在生成分析报告...</text>
+  <!-- ===== 骨架屏加载状态 ===== -->
+  <view class="skeleton-state" wx:if="{{isLoading}}">
+    <!-- 骨架屏：居家观察建议卡片 -->
+    <view class="skeleton-section">
+      <view class="skeleton-section-header">
+        <view class="skeleton-section-icon skeleton-shimmer"></view>
+        <view class="skeleton-section-title skeleton-shimmer"></view>
+      </view>
+      <view class="skeleton-section-body">
+        <view class="skeleton-card skeleton-shimmer"></view>
+        <view class="skeleton-card skeleton-shimmer"></view>
+      </view>
+    </view>
+    <!-- 骨架屏：绝对禁止行为卡片 -->
+    <view class="skeleton-section">
+      <view class="skeleton-section-header">
+        <view class="skeleton-section-icon skeleton-shimmer"></view>
+        <view class="skeleton-section-title skeleton-shimmer"></view>
+      </view>
+      <view class="skeleton-section-body">
+        <view class="skeleton-card skeleton-shimmer"></view>
+      </view>
+    </view>
+    <!-- 骨架屏：建议就医条件卡片 -->
+    <view class="skeleton-section">
+      <view class="skeleton-section-header">
+        <view class="skeleton-section-icon skeleton-shimmer"></view>
+        <view class="skeleton-section-title skeleton-shimmer"></view>
+      </view>
+      <view class="skeleton-section-body">
+        <view class="skeleton-card skeleton-shimmer"></view>
+        <view class="skeleton-card skeleton-shimmer"></view>
+      </view>
+    </view>
   </view>
 
-  <!-- ===== 加载失败 ===== -->
+  <!-- ===== 加载失败 - 根据错误类型显示不同提示 ===== -->
   <view class="error-state" wx:elif="{{loadError}}">
-    <text class="error-text">加载失败，请检查网络后重试</text>
-    <view class="retry-btn" bindtap="onRetry">
+    <text class="error-icon" wx:if="{{errorType === 'network'}}">📶</text>
+    <text class="error-icon" wx:elif="{{errorType === 'timeout'}}">⏱️</text>
+    <text class="error-icon" wx:elif="{{errorType === 'server'}}">🔧</text>
+    <text class="error-icon" wx:elif="{{errorType === 'notfound'}}">🔍</text>
+    <text class="error-icon" wx:elif="{{errorType === 'empty'}}">📭</text>
+    <text class="error-icon" wx:else>⚠️</text>
+    <text class="error-text">{{errorMessage || '加载失败，请检查网络后重试'}}</text>
+    <view class="retry-btn" wx:if="{{showRetry}}" bindtap="onRetry">
       <text class="retry-btn-text">重新加载</text>
+    </view>
+    <view class="retry-btn" wx:else bindtap="onGoHome">
+      <text class="retry-btn-text">返回首页</text>
     </view>
   </view>
 
@@ -118,7 +158,6 @@
     <!-- 生成病情摘要按钮（始终显示，未付费置灰，已付费蓝色） -->
     <view class="summary-section">
       <view class="summary-btn {{isUnlocked ? 'summary-btn-active' : 'summary-btn-disabled'}}" bindtap="onTapSummaryBtn">
-        <text class="summary-btn-icon">{{isUnlocked ? '写' : '锁'}}</text>
         <text class="summary-btn-text">{{isUnlocked ? '生成病情摘要' : '解锁后生成病情摘要'}}</text>
       </view>
     </view>

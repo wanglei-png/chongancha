@@ -252,11 +252,11 @@ async def create_order(
 
     # 商品描述
     descriptions = {
-        "single": "宠安查-单次症状查询",
-        "monthly": "宠安查-月度订阅",
-        "yearly": "宠安查-年度订阅",
+        "single": "宠急查-单次症状查询",
+        "monthly": "宠急查-月度订阅",
+        "yearly": "宠急查-年度订阅",
     }
-    description = descriptions.get(request.product_type, "宠安查-支付")
+    description = descriptions.get(request.product_type, "宠急查-支付")
 
     # 插入订单
     order = Order(

@@ -10,16 +10,27 @@
     <view class="header-placeholder"></view>
   </view>
 
-  <!-- ===== 加载中 ===== -->
+  <!-- ===== 加载中 - 旋转动画 ===== -->
   <view class="loading-state" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
     <text class="loading-text">正在生成病情摘要...</text>
+    <text class="loading-hint">AI 正在分析宠物信息，请稍候</text>
   </view>
 
-  <!-- ===== 加载失败 ===== -->
+  <!-- ===== 加载失败 - 根据错误类型显示不同提示 ===== -->
   <view class="error-state" wx:elif="{{loadError}}">
-    <text class="error-text">生成失败，请检查网络后重试</text>
-    <view class="retry-btn" bindtap="onRetry">
+    <text class="error-icon" wx:if="{{errorType === 'network'}}">📶</text>
+    <text class="error-icon" wx:elif="{{errorType === 'timeout'}}">⏱️</text>
+    <text class="error-icon" wx:elif="{{errorType === 'server'}}">🔧</text>
+    <text class="error-icon" wx:elif="{{errorType === 'notfound'}}">🔍</text>
+    <text class="error-icon" wx:elif="{{errorType === 'empty'}}">📭</text>
+    <text class="error-icon" wx:else>⚠️</text>
+    <text class="error-text">{{errorMessage || '生成失败，请检查网络后重试'}}</text>
+    <view class="retry-btn" wx:if="{{showRetry}}" bindtap="onRetry">
       <text class="retry-btn-text">重新生成</text>
+    </view>
+    <view class="retry-btn" wx:else bindtap="onGoHome">
+      <text class="retry-btn-text">返回首页</text>
     </view>
   </view>
 

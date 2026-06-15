@@ -1,4 +1,4 @@
-<!-- 首页：宠安查 - 宠物健康决策助手 -->
+<!-- 首页：宠急查 - 宠物健康决策助手 -->
 <view class="page">
   <!-- 右上角"我的"入口 -->
   <view class="profile-entry" bindtap="goProfile">
@@ -8,7 +8,7 @@
 
   <!-- 顶部品牌区 -->
   <view class="header">
-    <text class="brand-name">宠安查</text>
+    <text class="brand-name">宠急查</text>
     <text class="brand-subtitle">宠物健康决策助手</text>
   </view>
 

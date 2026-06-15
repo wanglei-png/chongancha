@@ -21,23 +21,29 @@
   <view class="section">
     <view class="section-header">
       <text class="section-title">🐾 我的宠物档案</text>
+      <text class="add-btn" bindtap="onAddPet">+ 添加</text>
     </view>
     <view class="section-body">
-      <!-- 有宠物信息 -->
-      <view class="pet-card" wx:for="{{petList}}" wx:key="index" bindtap="onEditPet" data-index="{{index}}">
-        <view class="pet-avatar">
-          <text class="pet-avatar-text">🐾</text>
-        </view>
-        <view class="pet-detail">
-          <text class="pet-name">{{item.name || item.breed || '我的宠物'}}</text>
-          <text class="pet-meta">{{item.breed || ''}}{{item.ageStage ? '·' + item.ageStage : ''}}{{item.weight ? '·' + item.weight : ''}}</text>
-        </view>
-        <text class="pet-arrow">›</text>
+      <!-- 加载中 -->
+      <view wx:if="{{isLoading}}" class="loading-tip">加载中...</view>
+
+      <!-- 空状态 -->
+      <view wx:elif="{{pets.length === 0}}" class="empty-tip">
+        暂无宠物档案，点击右上角添加
       </view>
-      <!-- 添加宠物 -->
-      <view class="pet-add-card" bindtap="onAddPet">
-        <text class="pet-add-icon">+</text>
-        <text class="pet-add-text">添加宠物档案</text>
+
+      <!-- 宠物列表 -->
+      <view wx:else class="pet-list">
+        <view wx:for="{{pets}}" wx:key="id" class="pet-card" data-id="{{item.id}}" bindtap="onEditPet">
+          <view class="pet-info">
+            <text class="pet-name">{{item.name || '宠物'}}</text>
+            <text class="pet-detail">{{item.breed}} · {{item.age_type === 'baby' ? '幼年' : item.age_type === 'adult' ? '成年' : '老年'}}</text>
+          </view>
+          <view class="pet-actions">
+            <text class="edit-btn" data-id="{{item.id}}" catchtap="onEditPet">编辑</text>
+            <text class="delete-btn" data-id="{{item.id}}" catchtap="onDeletePet">删除</text>
+          </view>
+        </view>
       </view>
     </view>
   </view>

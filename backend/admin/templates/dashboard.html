@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>宠急查 - 数据看板</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
+        .header { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #2B7AE8; }
+        .stat-label { color: #666; margin-top: 8px; }
+        .nav { background: white; padding: 16px; border-radius: 12px; margin-bottom: 20px; }
+        .nav a { color: #2B7AE8; text-decoration: none; margin-right: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>宠急查数据看板</h1>
+        <p>实时运营数据监控</p>
+    </div>
+    
+    <div class="nav">
+        <a href="/admin/dashboard">数据看板</a>
+        <a href="/admin/promotions">优惠券管理</a>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_users }}</div>
+            <div class="stat-label">总用户数</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_orders }}</div>
+            <div class="stat-label">总订单数</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">¥{{ stats.total_revenue }}</div>
+            <div class="stat-label">总收入</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_queries }}</div>
+            <div class="stat-label">总查询数</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.total_llm_calls }}</div>
+            <div class="stat-label">LLM调用次数</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">¥{{ stats.total_llm_cost }}</div>
+            <div class="stat-label">LLM总成本</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.recent_queries }}</div>
+            <div class="stat-label">近7天查询</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.active_users }}</div>
+            <div class="stat-label">近7天活跃用户</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -235,3 +235,99 @@ def _get_icon_emoji(symptom_id: str) -> str:
         if key in symptom_id:
             return emoji
     return "🩺"
+
+
+# ============================================================
+# V2.1 新增：模糊搜索接口
+# ============================================================
+
+
+class FuzzySearchRequest(BaseModel):
+    query: str = Field(..., min_length=1, max_length=100, description="用户输入的查询文本")
+    top_k: int = Field(default=5, ge=1, le=10, description="返回结果数量")
+    threshold: float = Field(default=0.5, ge=0.0, le=1.0, description="相似度阈值")
+
+
+class FuzzySearchResult(BaseModel):
+    symptom_id: str
+    symptom_name: str
+    description: str
+    similarity: float
+    is_exact_match: bool = False  # 是否精确匹配
+
+
+class FuzzySearchResponse(BaseModel):
+    query: str
+    results: List[FuzzySearchResult]
+    has_exact_match: bool = False  # 是否有精确匹配结果
+    suggestion: str = ""  # 搜索建议
+
+
+@router.post("/search/fuzzy", response_model=FuzzySearchResponse)
+def fuzzy_search_symptoms(request: FuzzySearchRequest, db: Session = Depends(get_db)):
+    """
+    模糊匹配症状（V2.1 功能，默认关闭）
+
+    示例：
+    - 输入"我家猫吐黄水" → 匹配到"猫咪呕吐"
+    - 输入"狗狗拉肚子" → 匹配到"狗狗腹泻"
+    - 输入"猫咪皮肤发红还掉毛" → 匹配到"猫咪皮肤红肿/瘙痒"
+    """
+
+    # 先尝试精确匹配（数据库LIKE查询）
+    exact_matches = db.query(Symptom).filter(
+        Symptom.symptom_name.contains(request.query)
+    ).all()
+
+    results = []
+    has_exact = False
+
+    # 精确匹配结果优先
+    for s in exact_matches:
+        results.append(FuzzySearchResult(
+            symptom_id=s.symptom_id,
+            symptom_name=s.symptom_name,
+            description=f"宠物{s.symptom_name}症状",
+            similarity=1.0,
+            is_exact_match=True
+        ))
+        has_exact = True
+
+    # 如果没有精确匹配，进行向量模糊检索
+    if not has_exact:
+        try:
+            vs = get_vector_service()
+            vector_results = vs.search(
+                query=request.query,
+                top_k=request.top_k,
+                threshold=request.threshold
+            )
+
+            for r in vector_results:
+                # 去重：避免和精确匹配重复
+                if not any(res.symptom_id == r["symptom_id"] for res in results):
+                    results.append(FuzzySearchResult(
+                        symptom_id=r["symptom_id"],
+                        symptom_name=r["symptom_name"],
+                        description=r.get("description", ""),
+                        similarity=r["similarity"],
+                        is_exact_match=False
+                    ))
+
+        except Exception as e:
+            print(f"[FuzzySearch] 向量检索失败: {e}")
+            # 降级：返回空结果 + 搜索建议
+
+    # 生成搜索建议
+    suggestion = ""
+    if not results:
+        suggestion = "未找到匹配症状，建议尝试搜索：呕吐、腹泻、皮肤红肿等关键词"
+    elif not has_exact and results:
+        suggestion = f"为您找到最相关的症状：{results[0].symptom_name}，请确认是否匹配"
+
+    return FuzzySearchResponse(
+        query=request.query,
+        results=results,
+        has_exact_match=has_exact,
+        suggestion=suggestion
+    )

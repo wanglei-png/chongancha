@@ -20,6 +20,9 @@ Page({
     // 加载状态
     isLoading: true,
     loadError: false,
+    errorType: '',         // 错误类型：network/timeout/server/notfound/empty
+    errorMessage: '',      // 错误提示文本
+    showRetry: true,       // 是否显示重试按钮
 
     // 后端返回的数据
     homeObservation: [],
@@ -56,8 +59,9 @@ Page({
     if (options.petInfo) {
       try {
         petInfo = JSON.parse(decodeURIComponent(options.petInfo))
-        // 构建宠物摘要
-        const parts = []
+        // 构建宠物摘要：宠物名称（fallback 品种名或"宠物"）
+        const petName = petInfo.petName || petInfo.breed || '宠物'
+        const parts = [petName]
         if (petInfo.breed) parts.push(petInfo.breed)
         if (petInfo.ageStage) {
           if (petInfo.ageDetail) {
@@ -124,11 +128,17 @@ Page({
    */
   fetchFreeResult(symptomId) {
     if (!symptomId) {
-      this.setData({ isLoading: false })
+      this.setData({
+        isLoading: false,
+        loadError: true,
+        errorType: 'notfound',
+        errorMessage: '该症状暂无数据',
+        showRetry: false,
+      })
       return
     }
 
-    this.setData({ isLoading: true, loadError: false })
+    this.setData({ isLoading: true, loadError: false, errorType: '', errorMessage: '' })
 
     const requestData = {
       symptom_id: symptomId,
@@ -163,14 +173,16 @@ Page({
       })
       .catch((err) => {
         console.error('获取免费结果失败:', err)
+        const errorMessage = err.message || api.getErrorMessage(err)
+        const errorType = err.type || 'unknown'
+        const showRetry = api.shouldShowRetry(err)
+
         this.setData({
           isLoading: false,
           loadError: true,
-        })
-        wx.showToast({
-          title: err.message || '网络异常，请稍后重试',
-          icon: 'none',
-          duration: 2000,
+          errorType,
+          errorMessage,
+          showRetry,
         })
       })
   },
@@ -216,7 +228,7 @@ Page({
         console.error('获取完整结果失败:', err)
         this.setData({ isLoading: false })
         wx.showToast({
-          title: '加载完整内容失败',
+          title: err.message || '加载完整内容失败',
           icon: 'none',
           duration: 2000,
         })
@@ -228,6 +240,15 @@ Page({
    */
   onRetry() {
     this.fetchFreeResult(this.data.symptom_id)
+  },
+
+  /**
+   * 返回首页
+   */
+  onGoHome() {
+    wx.switchTab({
+      url: '/pages/index/index',
+    })
   },
 
   /**

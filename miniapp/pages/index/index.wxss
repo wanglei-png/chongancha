@@ -1,4 +1,4 @@
-/* 首页样式 - 宠安查 */
+/* 首页样式 - 宠急查 */
 
 page {
   background-color: #ffffff;
@@ -141,7 +141,7 @@ page {
   line-height: 1;
 }
 
-/* 下拉列表 */
+/* 下拉列表 - 带淡入淡出 + 滑动动画 */
 .search-dropdown {
   width: 100%;
   background-color: #ffffff;
@@ -150,15 +150,20 @@ page {
   max-height: 400rpx;
   overflow-y: auto;
   margin-top: 8rpx;
-  display: none;
   position: absolute;
   left: 0;
   right: 0;
   z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10rpx);
+  transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms ease-out;
 }
 
 .search-dropdown-show {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 /* 下拉列表项 */
