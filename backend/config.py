@@ -59,9 +59,17 @@ class Settings(BaseSettings):
     WX_API_KEY: str = ""
     WX_NOTIFY_URL: str = ""
 
+    # V2.1 向量检索配置
+    MILVUS_DB_PATH: str = "./milvus_pet_health.db"
+
+    # V2.2 管理后台配置
+    ADMIN_USERNAME: str = "admin"
+    ADMIN_PASSWORD: str = "changeme123"
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"  # 允许 .env 中有未定义的字段
 
 
 @lru_cache()
