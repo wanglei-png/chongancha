@@ -29,6 +29,9 @@ Page({
     // 原始摘要文本（用于判断是否被修改）
     originalText: '',
 
+    // V2.1 相似症状推荐
+    similarSymptomsList: [],
+
     // 订阅弹窗
     showSubModal: false,
     selectedSub: 'monthly',
@@ -103,10 +106,21 @@ Page({
         const pad = (n) => String(n).padStart(2, '0')
         const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`
 
+        // 处理相似症状推荐（V2.1）
+        let similarList = []
+        if (res.similar_symptoms && Array.isArray(res.similar_symptoms)) {
+          similarList = res.similar_symptoms.map(item => ({
+            symptom_id: item.symptom_id || '',
+            symptom_name: item.symptom_name || '',
+            similarity: item.similarity || 0
+          }))
+        }
+
         this.setData({
           summaryText: res.summary || '',
           originalText: res.summary || '',
           summaryDate: dateStr,
+          similarSymptomsList: similarList,
           isLoading: false,
         })
       })
@@ -224,6 +238,18 @@ Page({
       duration: 2000,
     })
     this.setData({ showSubModal: false })
+  },
+
+  /**
+   * 点击相似症状标签（V2.1）
+   */
+  onTapSimilarSymptom(e) {
+    const symptomId = e.currentTarget.dataset.symptomId
+    if (!symptomId) return
+
+    wx.navigateTo({
+      url: `/pages/result/result?symptom_id=${encodeURIComponent(symptomId)}`,
+    })
   },
 
   /**

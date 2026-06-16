@@ -51,6 +51,16 @@
       />
     </view>
 
+    <!-- ===== V2.1 相似症状推荐 ===== -->
+    <view class="similar-section" wx:if="{{similarSymptomsList.length > 0}}">
+      <text class="similar-title">🔍 您可能还想了解：</text>
+      <view class="similar-tags">
+        <text wx:for="{{similarSymptomsList}}" wx:key="symptom_id" class="similar-tag" data-symptom-id="{{item.symptom_id}}" bindtap="onTapSimilarSymptom">
+          {{item.symptom_name}}
+        </text>
+      </view>
+    </view>
+
     <!-- ===== 操作按钮区 ===== -->
     <view class="actions">
       <view class="action-btn action-btn-primary" bindtap="onCopyText">
